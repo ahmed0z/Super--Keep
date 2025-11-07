@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss";
 
+const animations = require('./tailwind-animations');
+
 const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -23,6 +25,8 @@ const config: Config = {
           pink: '#fdcfe8',
         },
       },
+      animation: animations.animation,
+      keyframes: animations.keyframes,
     },
   },
   plugins: [],

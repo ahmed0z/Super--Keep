@@ -8,6 +8,7 @@
 import React from 'react';
 import { Menu, Search } from 'lucide-react';
 import { IconButton } from '@/components/ui/IconButton';
+import { DarkModeToggle } from '@/components/ui/DarkModeToggle';
 
 export interface HeaderProps {
   onMenuClick?: () => void;
@@ -38,6 +39,7 @@ export function Header({ onMenuClick, onSearchClick }: HeaderProps) {
             variant="ghost"
             onClick={onSearchClick}
           />
+          <DarkModeToggle />
         </div>
       </div>
     </header>

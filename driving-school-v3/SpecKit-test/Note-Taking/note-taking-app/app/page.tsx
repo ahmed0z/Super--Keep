@@ -2,7 +2,7 @@
 
 import { Plus, Archive as ArchiveIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { EmptyState } from '@/components/layout/EmptyState';
 import { Button } from '@/components/ui/Button';
@@ -11,8 +11,11 @@ import { SearchBar } from '@/components/ui/SearchBar';
 import { FilterMenu, FilterOptions } from '@/components/ui/FilterMenu';
 import { NoteGrid } from '@/components/notes/NoteGrid';
 import { NoteList } from '@/components/notes/NoteList';
+import { NoteGridSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useNotes } from '@/hooks/useNotes';
 import { useViewMode } from '@/hooks/useViewMode';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useToast } from '@/components/ui/Toast';
 import { Note } from '@/types';
 import Link from 'next/link';
 
@@ -20,6 +23,7 @@ export default function Home() {
   const router = useRouter();
   const { notes, loading, createNote, togglePin, toggleArchive, deleteNote } = useNotes();
   const { viewMode, setViewMode } = useViewMode();
+  const { addToast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<FilterOptions>({
     colors: [],
@@ -34,6 +38,44 @@ export default function Home() {
     notes.forEach(note => note.tags.forEach(tag => tagSet.add(tag)));
     return Array.from(tagSet).sort();
   }, [notes]);
+
+  const handleCreateNote = async () => {
+    try {
+      const newNote = await createNote();
+      addToast('Note created successfully', 'success');
+      router.push(`/notes/${newNote.id}`);
+    } catch (error) {
+      console.error('Failed to create note:', error);
+      addToast('Failed to create note', 'error');
+    }
+  };
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts([
+    {
+      key: 'n',
+      ctrlKey: true,
+      handler: handleCreateNote,
+      description: 'Create new note'
+    },
+    {
+      key: 'f',
+      ctrlKey: true,
+      handler: () => {
+        const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
+        searchInput?.focus();
+      },
+      description: 'Focus search'
+    },
+    {
+      key: '/',
+      handler: () => {
+        const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
+        searchInput?.focus();
+      },
+      description: 'Focus search'
+    }
+  ]);
 
   // Filter and search notes
   const filteredNotes = useMemo(() => {
@@ -88,15 +130,6 @@ export default function Home() {
     });
   }, [notes, filters, searchQuery]);
 
-  const handleCreateNote = async () => {
-    try {
-      const newNote = await createNote();
-      router.push(`/notes/${newNote.id}`);
-    } catch (error) {
-      console.error('Failed to create note:', error);
-    }
-  };
-
   const handleNoteClick = (note: Note) => {
     router.push(`/notes/${note.id}`);
   };
@@ -104,16 +137,20 @@ export default function Home() {
   const handlePin = async (note: Note) => {
     try {
       await togglePin(note.id);
+      addToast(note.pinned ? 'Note unpinned' : 'Note pinned', 'success');
     } catch (error) {
       console.error('Failed to pin note:', error);
+      addToast('Failed to pin note', 'error');
     }
   };
 
   const handleArchive = async (note: Note) => {
     try {
       await toggleArchive(note.id);
+      addToast(note.archived ? 'Note unarchived' : 'Note archived', 'success');
     } catch (error) {
       console.error('Failed to archive note:', error);
+      addToast('Failed to archive note', 'error');
     }
   };
 
@@ -121,8 +158,10 @@ export default function Home() {
     if (confirm('Are you sure you want to delete this note?')) {
       try {
         await deleteNote(note.id);
+        addToast('Note deleted', 'success');
       } catch (error) {
         console.error('Failed to delete note:', error);
+        addToast('Failed to delete note', 'error');
       }
     }
   };
@@ -130,9 +169,7 @@ export default function Home() {
   if (loading) {
     return (
       <AppLayout>
-        <div className="flex items-center justify-center min-h-[50vh]">
-          <div className="text-gray-500 dark:text-gray-400">Loading...</div>
-        </div>
+        <NoteGridSkeleton count={6} />
       </AppLayout>
     );
   }
