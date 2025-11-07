@@ -4,13 +4,14 @@
  */
 
 import { create } from 'zustand';
-import { Note, NoteCreateInput, NoteUpdateInput } from '@/types';
+import { Note, NoteCreateInput, NoteUpdateInput, NoteColor } from '@/types';
 import { localStorageService } from '@/lib/storage';
 
 interface NotesState {
   notes: Note[];
   loading: boolean;
   error: string | null;
+  selectedNotes: Set<string>;
   
   // Actions
   fetchNotes: () => Promise<void>;
@@ -18,10 +19,16 @@ interface NotesState {
   updateNote: (id: string, input: NoteUpdateInput) => Promise<Note>;
   deleteNote: (id: string) => Promise<void>;
   bulkDeleteNotes: (ids: string[]) => Promise<void>;
+  bulkUpdateNotes: (ids: string[], updates: NoteUpdateInput) => Promise<void>;
   searchNotes: (query: string) => Promise<Note[]>;
   getNotesByTag: (tag: string) => Promise<Note[]>;
   getPinnedNotes: () => Promise<Note[]>;
   getArchivedNotes: () => Promise<Note[]>;
+  
+  // Selection
+  toggleNoteSelection: (id: string) => void;
+  selectAllNotes: () => void;
+  clearSelection: () => void;
   
   // Optimistic updates
   setNotes: (notes: Note[]) => void;
@@ -34,6 +41,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   notes: [],
   loading: false,
   error: null,
+  selectedNotes: new Set<string>(),
 
   fetchNotes: async () => {
     set({ loading: true, error: null });
@@ -108,11 +116,36 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       const idsSet = new Set(ids);
       set((state) => ({
         notes: state.notes.filter((note) => !idsSet.has(note.id)),
+        selectedNotes: new Set(),
         loading: false,
       }));
     } catch (error) {
       set({
         error: error instanceof Error ? error.message : 'Failed to delete notes',
+        loading: false,
+      });
+      throw error;
+    }
+  },
+
+  bulkUpdateNotes: async (ids: string[], updates: NoteUpdateInput) => {
+    set({ loading: true, error: null });
+    try {
+      const idsSet = new Set(ids);
+      const promises = ids.map(id => localStorageService.updateNote(id, updates));
+      const updatedNotes = await Promise.all(promises);
+      const updatedNotesMap = new Map(updatedNotes.map(note => [note.id, note]));
+      
+      set((state) => ({
+        notes: state.notes.map((note) => 
+          idsSet.has(note.id) ? (updatedNotesMap.get(note.id) || note) : note
+        ),
+        selectedNotes: new Set(),
+        loading: false,
+      }));
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : 'Failed to update notes',
         loading: false,
       });
       throw error;
@@ -178,6 +211,26 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       throw error;
     }
   },
+
+  // Selection management
+  toggleNoteSelection: (id: string) =>
+    set((state) => {
+      const newSelected = new Set(state.selectedNotes);
+      if (newSelected.has(id)) {
+        newSelected.delete(id);
+      } else {
+        newSelected.add(id);
+      }
+      return { selectedNotes: newSelected };
+    }),
+
+  selectAllNotes: () =>
+    set((state) => ({
+      selectedNotes: new Set(state.notes.map(n => n.id))
+    })),
+
+  clearSelection: () =>
+    set({ selectedNotes: new Set() }),
 
   // Optimistic update helpers
   setNotes: (notes: Note[]) => set({ notes }),
