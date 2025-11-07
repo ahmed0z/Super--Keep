@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useNotes } from '@/hooks/useNotes';
-import { NoteEditor } from '@/components/notes/NoteEditor';
+import { MultiBlockEditor } from '@/components/notes/MultiBlockEditor';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/Button';
 import { ArrowLeft, Save } from 'lucide-react';
@@ -75,7 +75,7 @@ export default function EditNotePage() {
 
         {/* Editor */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-          <NoteEditor
+          <MultiBlockEditor
             note={note}
             onUpdate={handleUpdate}
             autoSave={true}
