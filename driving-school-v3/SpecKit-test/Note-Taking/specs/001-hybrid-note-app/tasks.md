@@ -24,20 +24,20 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Initialize Next.js 14+ project with TypeScript and App Router at note-taking-app/
-- [ ] T002 Configure next.config.js for static export (output: 'export') at note-taking-app/next.config.js
-- [ ] T003 [P] Install core dependencies: React 18+, Zustand, Zod, date-fns, lucide-react at note-taking-app/package.json
-- [ ] T004 [P] Install dev dependencies: Vitest, React Testing Library, Playwright, ESLint, Prettier at note-taking-app/package.json
-- [ ] T005 [P] Setup Tailwind CSS 3.x with custom configuration (color palette) at note-taking-app/tailwind.config.ts
-- [ ] T006 [P] Configure TypeScript strict mode at note-taking-app/tsconfig.json
-- [ ] T007 [P] Setup ESLint with Next.js config and accessibility plugin at note-taking-app/.eslintrc.json
-- [ ] T008 [P] Setup Prettier configuration at note-taking-app/.prettierrc
-- [ ] T009 [P] Configure Husky pre-commit hooks for linting and type checking at note-taking-app/.husky/
-- [ ] T010 [P] Setup Vitest configuration at note-taking-app/vitest.config.ts
-- [ ] T011 [P] Setup Playwright configuration with mobile device emulation at note-taking-app/playwright.config.ts
-- [ ] T012 Create base directory structure: src/app, src/components, src/lib, src/hooks, src/store, src/types at note-taking-app/src/
-- [ ] T013 [P] Create global styles with Tailwind imports at note-taking-app/src/app/globals.css
-- [ ] T014 [P] Create PWA manifest.json at note-taking-app/public/manifest.json
+- [x] T001 Initialize Next.js 14+ project with TypeScript and App Router at note-taking-app/
+- [x] T002 Configure next.config.js for static export (output: 'export') at note-taking-app/next.config.js
+- [x] T003 [P] Install core dependencies: React 18+, Zustand, Zod, date-fns, lucide-react at note-taking-app/package.json
+- [x] T004 [P] Install dev dependencies: Vitest, React Testing Library, Playwright, ESLint, Prettier at note-taking-app/package.json
+- [x] T005 [P] Setup Tailwind CSS 3.x with custom configuration (color palette) at note-taking-app/tailwind.config.ts
+- [x] T006 [P] Configure TypeScript strict mode at note-taking-app/tsconfig.json
+- [x] T007 [P] Setup ESLint with Next.js config and accessibility plugin at note-taking-app/.eslintrc.json
+- [x] T008 [P] Setup Prettier configuration at note-taking-app/.prettierrc
+- [x] T009 [P] Configure Husky pre-commit hooks for linting and type checking at note-taking-app/.husky/
+- [x] T010 [P] Setup Vitest configuration at note-taking-app/vitest.config.ts
+- [x] T011 [P] Setup Playwright configuration with mobile device emulation at note-taking-app/playwright.config.ts
+- [x] T012 Create base directory structure: src/app, src/components, src/lib, src/hooks, src/store, src/types at note-taking-app/src/
+- [x] T013 [P] Create global styles with Tailwind imports at note-taking-app/src/app/globals.css
+- [x] T014 [P] Create PWA manifest.json at note-taking-app/public/manifest.json
 
 ---
 
