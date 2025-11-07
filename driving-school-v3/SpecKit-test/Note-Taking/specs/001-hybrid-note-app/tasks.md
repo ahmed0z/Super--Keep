@@ -68,13 +68,13 @@
 - [x] T033 Create custom hook useNotes for CRUD operations at note-taking-app/src/hooks/useNotes.ts
 - [x] T034 [P] Create custom hook useLocalStorage for storage abstraction at note-taking-app/src/hooks/useLocalStorage.ts
 - [x] T035 [P] Create custom hook useAutoSave with 500ms debounce at note-taking-app/src/hooks/useAutoSave.ts
-- [ ] T036 Create root layout component at note-taking-app/src/app/layout.tsx
-- [ ] T037 [P] Create base UI components: Button at note-taking-app/src/components/ui/Button.tsx
-- [ ] T038 [P] Create base UI components: Card at note-taking-app/src/components/ui/Card.tsx
-- [ ] T039 [P] Create base UI components: IconButton at note-taking-app/src/components/ui/IconButton.tsx
-- [ ] T040 [P] Create AppLayout component with header at note-taking-app/src/components/layout/AppLayout.tsx
-- [ ] T041 [P] Create Header component at note-taking-app/src/components/layout/Header.tsx
-- [ ] T042 [P] Create EmptyState component at note-taking-app/src/components/layout/EmptyState.tsx
+- [x] T036 Create root layout component at note-taking-app/src/app/layout.tsx
+- [x] T037 [P] Create base UI components: Button at note-taking-app/src/components/ui/Button.tsx
+- [x] T038 [P] Create base UI components: Card at note-taking-app/src/components/ui/Card.tsx
+- [x] T039 [P] Create base UI components: IconButton at note-taking-app/src/components/ui/IconButton.tsx
+- [x] T040 [P] Create AppLayout component with header at note-taking-app/src/components/layout/AppLayout.tsx
+- [x] T041 [P] Create Header component at note-taking-app/src/components/layout/Header.tsx
+- [x] T042 [P] Create EmptyState component at note-taking-app/src/components/layout/EmptyState.tsx
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
