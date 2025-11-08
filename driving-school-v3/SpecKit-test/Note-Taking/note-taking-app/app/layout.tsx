@@ -1,13 +1,7 @@
-'use client';
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ToastProvider } from "@/components/ui/Toast";
-import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
-import { OfflineIndicator } from "@/components/ui/OfflineIndicator";
-import { PWAInstallPrompt } from "@/components/ui/PWAInstallPrompt";
-import { OnboardingFlow } from "@/components/ui/OnboardingFlow";
+import { Providers } from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,14 +33,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ErrorBoundary>
-          <ToastProvider>
-            {children}
-            <OfflineIndicator />
-            <PWAInstallPrompt />
-            <OnboardingFlow />
-          </ToastProvider>
-        </ErrorBoundary>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
