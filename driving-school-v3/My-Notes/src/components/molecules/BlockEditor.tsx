@@ -39,7 +39,6 @@ import {
   DocumentDuplicateIcon,
   TrashIcon,
   ArrowsUpDownIcon,
-  ChevronRightIcon,
 } from '@heroicons/react/24/outline';
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 import type { ContentBlock, BlockType } from '../../types';
@@ -557,20 +556,37 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
               </div>
             )}
 
-            {/* Toggle arrow for toggle lists */}
+            {/* Toggle arrow for toggle lists - Notion style filled triangle */}
             {block.type === 'toggle' && (
               <button
                 type="button"
-                onClick={() => handleUpdateBlock(block.id, { isExpanded: !block.isExpanded })}
-                className="flex-shrink-0 mt-0.5 p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                onClick={() => {
+                  const isExpanding = !block.isExpanded;
+                  // Auto-create first child block when expanding empty toggle
+                  if (isExpanding && (!block.children || block.children.length === 0)) {
+                    const newChild: ContentBlock = {
+                      id: Math.random().toString(36).substr(2, 9),
+                      type: 'text',
+                      content: '',
+                      order: 0,
+                    };
+                    handleUpdateBlock(block.id, { isExpanded: true, children: [newChild] });
+                    setTimeout(() => {
+                      inputRefs.current.get(newChild.id)?.focus();
+                    }, 10);
+                  } else {
+                    handleUpdateBlock(block.id, { isExpanded: isExpanding });
+                  }
+                }}
+                className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
                 title={block.isExpanded ? 'Collapse' : 'Expand'}
               >
-                <ChevronRightIcon 
-                  className={clsx(
-                    'h-4 w-4 text-gray-500 transition-transform',
-                    block.isExpanded && 'rotate-90'
-                  )}
-                />
+                <span className={clsx(
+                  'text-xs transition-transform inline-block',
+                  block.isExpanded ? 'rotate-90' : ''
+                )}>
+                  ▶
+                </span>
               </button>
             )}
             
@@ -634,7 +650,7 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 
           {/* Nested children for toggle blocks */}
           {block.type === 'toggle' && block.isExpanded && block.children && block.children.length > 0 && (
-            <div className="ml-10 mt-1 space-y-1 border-l-2 border-gray-200 dark:border-gray-700 pl-3">
+            <div className="ml-6 mt-0.5">
               <BlockEditor
                 blocks={block.children}
                 onBlocksChange={(newChildren) => {
@@ -642,32 +658,6 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
                 }}
                 readOnly={readOnly}
               />
-            </div>
-          )}
-
-          {/* Add child button for expanded toggle blocks */}
-          {block.type === 'toggle' && block.isExpanded && (!block.children || block.children.length === 0) && !readOnly && (
-            <div className="ml-10 mt-1 pl-3 border-l-2 border-gray-200 dark:border-gray-700">
-              <button
-                type="button"
-                onClick={() => {
-                  const newChild: ContentBlock = {
-                    id: Math.random().toString(36).substr(2, 9),
-                    type: 'text',
-                    content: '',
-                    order: 0,
-                  };
-                  handleUpdateBlock(block.id, { children: [newChild] });
-                  
-                  // Focus the new child after rendering
-                  setTimeout(() => {
-                    inputRefs.current.get(newChild.id)?.focus();
-                  }, 10);
-                }}
-                className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 py-1"
-              >
-                + Add item
-              </button>
             </div>
           )}
         </div>
