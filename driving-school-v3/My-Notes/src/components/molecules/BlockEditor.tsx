@@ -58,6 +58,9 @@ interface BlockEditorProps {
   /** If true, disables all editing features (no drag handles, add buttons, or menus) */
   readOnly?: boolean;
   
+  /** If true, this is a nested editor inside a toggle (removes min-height and bottom row) */
+  isNested?: boolean;
+  
   /** Additional CSS classes to apply to the root container */
   className?: string;
 }
@@ -66,6 +69,7 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
   blocks,
   onBlocksChange,
   readOnly = false,
+  isNested = false,
   className,
 }) => {
   const [draggingId, setDraggingId] = useState<string | null>(null);
@@ -332,9 +336,10 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
    * Initialization Effect
    * Ensures at least one empty block exists when the editor is first rendered
    * This provides users with an immediate place to start typing
+   * (Only for root editor, not nested editors)
    */
   useEffect(() => {
-    if (blocks.length === 0) {
+    if (!isNested && blocks.length === 0) {
       const initialBlock: ContentBlock = {
         id: Math.random().toString(36).substr(2, 9),
         type: 'text',
@@ -346,7 +351,7 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
   }, []);
 
   return (
-    <div className={clsx('min-h-[500px]', className)}>
+    <div className={clsx(!isNested && 'min-h-[500px]', className)}>
       {blocks.map((block) => (
         <div
           key={block.id}
@@ -647,13 +652,14 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 
           {/* Nested children for toggle blocks */}
           {block.type === 'toggle' && block.isExpanded && block.children && block.children.length > 0 && (
-            <div className="ml-6 mt-0.5">
+            <div className="ml-5">
               <BlockEditor
                 blocks={block.children}
                 onBlocksChange={(newChildren) => {
                   handleUpdateBlock(block.id, { children: newChildren });
                 }}
                 readOnly={readOnly}
+                isNested={true}
               />
             </div>
           )}
@@ -661,7 +667,7 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
       ))}
 
       {/* Notion-style bottom row - shows controls on hover, tabbing creates actual editable row */}
-      {!readOnly && (
+      {!readOnly && !isNested && (
         <div className="group relative flex items-start gap-1 py-1 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800/50">
           {/* Left controls: + and drag handle (only show on hover) */}
           <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100">
