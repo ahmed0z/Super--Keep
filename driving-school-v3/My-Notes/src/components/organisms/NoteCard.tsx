@@ -191,15 +191,27 @@ export const NoteCard: React.FC<NoteCardProps> = ({
                 )}
                 {block.type === 'toggle' && (
                   <div>
-                    <div className="flex items-start gap-2">
-                      <span className="text-gray-500 text-xs mt-0.5">▸</span>
+                    <div className="flex items-start gap-1">
+                      <span className="text-gray-500 text-[10px]">▼</span>
                       <span className="text-sm text-gray-700 dark:text-gray-300 break-words flex-1">
                         {block.content}
                       </span>
                     </div>
                     {block.children && block.children.length > 0 && (
-                      <div className="ml-6 mt-1 text-xs text-gray-500 dark:text-gray-400">
-                        {block.children.length} item{block.children.length !== 1 ? 's' : ''}
+                      <div className="ml-4 mt-0.5 space-y-0.5">
+                        {block.children.slice(0, 3).map((child) => (
+                          <div key={child.id} className="flex items-start gap-1 text-sm text-gray-600 dark:text-gray-400">
+                            {child.type === 'checklist' && <span className="text-gray-400">☐</span>}
+                            <span className={child.type === 'checklist' && child.checked ? 'line-through text-gray-400' : ''}>
+                              {child.content}
+                            </span>
+                          </div>
+                        ))}
+                        {block.children.length > 3 && (
+                          <div className="text-xs text-gray-400">
+                            +{block.children.length - 3} more
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

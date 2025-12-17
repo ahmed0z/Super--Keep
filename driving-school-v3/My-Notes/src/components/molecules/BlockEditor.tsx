@@ -556,7 +556,7 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
               </div>
             )}
 
-            {/* Toggle arrow for toggle lists - Notion style filled triangle */}
+            {/* Toggle arrow for toggle lists - Notion style */}
             {block.type === 'toggle' && (
               <button
                 type="button"
@@ -578,14 +578,11 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
                     handleUpdateBlock(block.id, { isExpanded: isExpanding });
                   }
                 }}
-                className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                className="flex-shrink-0 flex items-center justify-center text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors mr-1"
                 title={block.isExpanded ? 'Collapse' : 'Expand'}
               >
-                <span className={clsx(
-                  'text-xs transition-transform inline-block',
-                  block.isExpanded ? 'rotate-90' : ''
-                )}>
-                  ▶
+                <span className="text-[10px] leading-none">
+                  {block.isExpanded ? '▼' : '▶'}
                 </span>
               </button>
             )}
