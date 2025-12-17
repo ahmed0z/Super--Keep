@@ -1,0 +1,467 @@
+@import "tailwindcss";
+
+/* Material 3 Expressive Theme Configuration for Tailwind v4 */
+@theme {
+  /* Note Colors - Dark theme optimized */
+  --color-note-default: #1a2336;
+  --color-note-red: #3d1f1f;
+  --color-note-orange: #3d2a1a;
+  --color-note-yellow: #3d3a1a;
+  --color-note-green: #1f3d2a;
+  --color-note-teal: #1a3d3a;
+  --color-note-blue: #1a2d4a;
+  --color-note-darkblue: #1e3a5f;
+  --color-note-purple: #2d1f3d;
+  --color-note-pink: #3d1f2d;
+  --color-note-brown: #2d2419;
+  --color-note-gray: #262a30;
+
+  /* Shadows - Soft blue-tinted elevation */
+  --shadow-note: 0 1px 3px rgba(26,37,48,0.05), 0 2px 8px rgba(26,37,48,0.08);
+  --shadow-note-hover: 0 4px 12px rgba(26,37,48,0.12), 0 8px 24px rgba(26,37,48,0.1);
+  --shadow-note-focus: 0 0 0 3px rgba(91,140,190,0.3), 0 4px 12px rgba(26,37,48,0.1);
+  --shadow-fab: 0 3px 8px rgba(26,37,48,0.15), 0 6px 20px rgba(26,37,48,0.12);
+  --shadow-fab-hover: 0 6px 16px rgba(26,37,48,0.18), 0 10px 32px rgba(26,37,48,0.15);
+
+  /* Expressive Animations - Bouncy and playful */
+  --animate-fade-in: fadeIn 0.3s cubic-bezier(0.2, 0, 0, 1);
+  --animate-slide-up: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-scale-in: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-bounce-in: bounceIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-ripple: ripple 0.6s cubic-bezier(0, 0, 0.2, 1);
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    0% { transform: translateY(24px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes scaleIn {
+    0% { transform: scale(0.85); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.95); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes ripple {
+    0% { transform: scale(0); opacity: 0.4; }
+    100% { transform: scale(4); opacity: 0; }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+}
+
+/* M3 Expressive Base Styles */
+@layer base {
+  :root {
+    /* Primary - Vibrant Blue */
+    --color-primary: #4a8fdf;
+    --color-primary-container: #e3f2fd;
+    --color-on-primary: #ffffff;
+    --color-on-primary-container: #0d47a1;
+    
+    /* Secondary - Light Blue */
+    --color-secondary: #5ba3e8;
+    --color-secondary-container: #bbdefb;
+    
+    /* Tertiary - Accent Blue */
+    --color-tertiary: #2196f3;
+    --color-tertiary-container: #90caf9;
+    
+    /* Surface - Clean white/blue tint palette */
+    --color-background: #f8fafc;
+    --color-surface: #ffffff;
+    --color-surface-variant: #f1f5f9;
+    --color-surface-container: #f8fafc;
+    --color-surface-container-high: #e8eef5;
+    --color-surface-container-highest: #dfe7f0;
+    
+    /* Text */
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #334155;
+    --color-text-tertiary: #64748b;
+    
+    /* Outline */
+    --color-outline: #94a3b8;
+    --color-outline-variant: #cbd5e1;
+    
+    /* Error */
+    --color-error: #dc2626;
+    --color-error-container: #fee2e2;
+  }
+
+  .dark {
+    /* Dark Theme - Deep Navy/Blue inspired by Capable Insure */
+    --color-primary: #6b9dff;
+    --color-primary-container: #1e3a5f;
+    --color-on-primary: #0a1428;
+    --color-on-primary-container: #d0e2ff;
+    
+    --color-secondary: #7fadff;
+    --color-secondary-container: #1a3352;
+    
+    --color-tertiary: #4dabf7;
+    --color-tertiary-container: #0d2136;
+    
+    --color-background: #0a0e1e;
+    --color-surface: #0f1525;
+    --color-surface-variant: #1a2336;
+    --color-surface-container: #131926;
+    --color-surface-container-high: #1d2a3f;
+    --color-surface-container-highest: #263548;
+    
+    --color-text-primary: #e8f0ff;
+    --color-text-secondary: #b8cfe8;
+    --color-text-tertiary: #7a92af;
+    
+    --color-outline: #4a5d7a;
+    --color-outline-variant: #2a3a52;
+    
+    --color-error: #ff6b6b;
+    --color-error-container: #3d0a0a;
+  }
+
+  body {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 50%, #e3f2fd 100%);
+    background-attachment: fixed;
+    color: var(--color-text-primary);
+    font-family: 'Google Sans', 'Product Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  .dark body {
+    background: linear-gradient(135deg, #000000 0%, #0a0e1e 50%, #1a2d4a 100%);
+  }
+
+  /* M3 Focus visible styles */
+  *:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* M3 Selection */
+  ::selection {
+    background-color: var(--color-primary-container);
+    color: var(--color-on-primary-container);
+  }
+}
+
+/* M3 Expressive Component Styles */
+@layer components {
+  /* M3 Note Card - Extra rounded with tonal elevation */
+  .note-card {
+    border-radius: 1.5rem;
+    border: 1px solid var(--color-outline-variant);
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    background: var(--color-surface);
+  }
+
+  .note-card:hover {
+    box-shadow: var(--shadow-note-hover);
+    transform: translateY(-2px);
+  }
+
+  .note-card:focus-within {
+    box-shadow: var(--shadow-note-focus);
+  }
+
+  /* M3 Expressive Button Variants - Pill shapes with tonal colors */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .btn:hover::before {
+    opacity: 0.08;
+  }
+
+  .btn:active::before {
+    opacity: 0.12;
+  }
+
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.38;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #6b9dff 0%, #4dabf7 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(107, 157, 255, 0.3);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(107, 157, 255, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: linear-gradient(135deg, #1e3a5f 0%, #1a3352 100%);
+    color: #7fadff;
+    border: 1px solid rgba(107, 157, 255, 0.3);
+  }
+
+  .btn-secondary:hover {
+    box-shadow: 0 4px 12px rgba(107, 157, 255, 0.2);
+    border-color: rgba(107, 157, 255, 0.5);
+  }
+
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    padding: 0.625rem;
+    color: var(--color-text-secondary);
+    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    opacity: 0;
+    border-radius: 9999px;
+    transition: opacity 0.2s;
+  }
+
+  .btn-icon:hover::before {
+    opacity: 0.08;
+  }
+
+  .btn-icon:hover {
+    background-color: var(--color-surface-container-high);
+  }
+
+  /* M3 Search Input - Pill shaped with surface tonal container */
+  .search-input {
+    width: 100%;
+    border-radius: 9999px;
+    border: none;
+    background-color: var(--color-surface-container-high);
+    padding: 0.875rem 1.25rem 0.875rem 3rem;
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .search-input::placeholder {
+    color: var(--color-text-tertiary);
+  }
+
+  .search-input:focus {
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-note-hover);
+    outline: none;
+  }
+
+  /* M3 Sidebar - Rounded pill navigation items */
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-radius: 9999px;
+    margin: 0 0.75rem;
+    padding: 0.875rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .sidebar-item:hover {
+    background-color: var(--color-surface-container-high);
+  }
+
+  .sidebar-item.active {
+    background-color: var(--color-secondary-container);
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+
+  /* M3 Note color backgrounds - Softer tonal colors */
+  .bg-note-default { background-color: var(--color-surface); }
+  .bg-note-red { background-color: var(--color-note-red); }
+  .bg-note-orange { background-color: var(--color-note-orange); }
+  .bg-note-yellow { background-color: var(--color-note-yellow); }
+  .bg-note-green { background-color: var(--color-note-green); }
+  .bg-note-teal { background-color: var(--color-note-teal); }
+  .bg-note-blue { background-color: var(--color-note-blue); }
+  .bg-note-darkblue { background-color: var(--color-note-darkblue); }
+  .bg-note-purple { background-color: var(--color-note-purple); }
+  .bg-note-pink { background-color: var(--color-note-pink); }
+  .bg-note-brown { background-color: var(--color-note-brown); }
+  .bg-note-gray { background-color: var(--color-note-gray); }
+
+  /* M3 Checkbox - Rounded with primary color */
+  .checkbox-custom {
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 0.375rem;
+    border: 2px solid var(--color-outline);
+    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .checkbox-custom:checked {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+  }
+
+  /* M3 Dropdown/Menu styles - Large rounded corners */
+  .dropdown-menu {
+    position: absolute;
+    z-index: 50;
+    margin-top: 0.5rem;
+    min-width: 14rem;
+    border-radius: 1rem;
+    background-color: var(--color-surface-container);
+    padding: 0.5rem;
+    box-shadow: var(--shadow-note-hover);
+  }
+
+  .dropdown-item {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    border-radius: 0.75rem;
+    transition: background-color 0.15s;
+    transition: background-color 0.15s;
+  }
+
+  .dropdown-item:hover {
+    background-color: #f3f4f6;
+  }
+
+  /* Toast notification styles */
+  .toast {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-radius: 0.5rem;
+    background-color: #1f2937;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: #ffffff;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Utility classes */
+@layer utilities {
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom scrollbar styling */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 4px;
+  }
+
+  /* Custom scrollbar for note editor */
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: var(--color-outline);
+    border-radius: 3px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-outline-variant);
+  }
+
+  /* Line clamp utilities */
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
