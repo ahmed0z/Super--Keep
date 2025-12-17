@@ -1,7 +1,7 @@
 {
   "name": "keepnotes",
-  "version": "1.0.0",
-  "description": "A Google Keep-inspired notes application with offline support",
+  "version": "1.1.0",
+  "description": "A Google Keep-inspired notes application with offline support and toggle lists",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -39,6 +39,7 @@ import {
   DocumentDuplicateIcon,
   TrashIcon,
   ArrowsUpDownIcon,
+  ChevronRightIcon,
 } from '@heroicons/react/24/outline';
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 import type { ContentBlock, BlockType } from '../../types';
@@ -85,6 +86,8 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
       type,
       content: '',
       checked: type === 'checklist' ? false : undefined,
+      isExpanded: type === 'toggle' ? true : undefined,
+      children: type === 'toggle' ? [] : undefined,
       order: blocks.find(b => b.id === afterId)!.order + 0.5,
     };
     
@@ -264,8 +267,17 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
    * @param blockId - ID of the block being converted
    * @param type - The new block type to apply
    */
-  const handleCommandSelect = (blockId: string, type: 'text' | 'checklist') => {
-    handleUpdateBlock(blockId, { type, checked: type === 'checklist' ? false : undefined });
+  const handleCommandSelect = (blockId: string, type: BlockType) => {
+    const updates: Partial<ContentBlock> = { type };
+    
+    if (type === 'checklist') {
+      updates.checked = false;
+    } else if (type === 'toggle') {
+      updates.isExpanded = true;
+      updates.children = [];
+    }
+    
+    handleUpdateBlock(blockId, updates);
     setShowCommandMenu(null);
     
     // Focus the input after type conversion
@@ -293,17 +305,23 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
   };
 
   /**
-   * Converts a block from one type to another (text ↔ checklist)
+   * Converts a block from one type to another (text ↔ checklist ↔ toggle)
    * Accessible via the context menu on the drag handle
    * 
    * @param blockId - ID of the block to convert
    * @param newType - The target block type
    */
-  const handleTurnInto = (blockId: string, newType: 'text' | 'checklist') => {
-    handleUpdateBlock(blockId, { 
-      type: newType, 
-      checked: newType === 'checklist' ? false : undefined 
-    });
+  const handleTurnInto = (blockId: string, newType: BlockType) => {
+    const updates: Partial<ContentBlock> = { type: newType };
+    
+    if (newType === 'checklist') {
+      updates.checked = false;
+    } else if (newType === 'toggle') {
+      updates.isExpanded = true;
+      updates.children = [];
+    }
+    
+    handleUpdateBlock(blockId, updates);
     
     // Focus the input after type conversion
     setTimeout(() => {
@@ -445,6 +463,17 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
                                   <span className="text-gray-500">☑</span>
                                   <span>Checklist</span>
                                 </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    handleTurnInto(block.id, 'toggle');
+                                    setShowMenu(false);
+                                  }}
+                                  className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
+                                >
+                                  <span className="text-gray-500">▸</span>
+                                  <span>Toggle list</span>
+                                </button>
                               </div>
                             )}
                           </div>
@@ -516,7 +545,7 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
             </div>
           )}
 
-          {/* Content input area with optional checkbox */}
+          {/* Content input area with optional checkbox or toggle icon */}
           <div className="flex-1 relative min-w-0 flex items-start gap-2">
             {/* Checkbox for checklist items only */}
             {block.type === 'checklist' && (
@@ -526,6 +555,23 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
                   onChange={() => handleUpdateBlock(block.id, { checked: !block.checked })}
                 />
               </div>
+            )}
+
+            {/* Toggle arrow for toggle lists */}
+            {block.type === 'toggle' && (
+              <button
+                type="button"
+                onClick={() => handleUpdateBlock(block.id, { isExpanded: !block.isExpanded })}
+                className="flex-shrink-0 mt-0.5 p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                title={block.isExpanded ? 'Collapse' : 'Expand'}
+              >
+                <ChevronRightIcon 
+                  className={clsx(
+                    'h-4 w-4 text-gray-500 transition-transform',
+                    block.isExpanded && 'rotate-90'
+                  )}
+                />
+              </button>
             )}
             
             {/* Text input */}
@@ -573,10 +619,57 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
                     <span className="text-gray-500">☑</span>
                     <span>To-do list</span>
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => handleCommandSelect(block.id, 'toggle')}
+                    className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 text-gray-700 dark:text-gray-200"
+                  >
+                    <span className="text-gray-500">▸</span>
+                    <span>Toggle list</span>
+                  </button>
                 </div>
               )}
             </div>
           </div>
+
+          {/* Nested children for toggle blocks */}
+          {block.type === 'toggle' && block.isExpanded && block.children && block.children.length > 0 && (
+            <div className="ml-10 mt-1 space-y-1 border-l-2 border-gray-200 dark:border-gray-700 pl-3">
+              <BlockEditor
+                blocks={block.children}
+                onBlocksChange={(newChildren) => {
+                  handleUpdateBlock(block.id, { children: newChildren });
+                }}
+                readOnly={readOnly}
+              />
+            </div>
+          )}
+
+          {/* Add child button for expanded toggle blocks */}
+          {block.type === 'toggle' && block.isExpanded && (!block.children || block.children.length === 0) && !readOnly && (
+            <div className="ml-10 mt-1 pl-3 border-l-2 border-gray-200 dark:border-gray-700">
+              <button
+                type="button"
+                onClick={() => {
+                  const newChild: ContentBlock = {
+                    id: Math.random().toString(36).substr(2, 9),
+                    type: 'text',
+                    content: '',
+                    order: 0,
+                  };
+                  handleUpdateBlock(block.id, { children: [newChild] });
+                  
+                  // Focus the new child after rendering
+                  setTimeout(() => {
+                    inputRefs.current.get(newChild.id)?.focus();
+                  }, 10);
+                }}
+                className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 py-1"
+              >
+                + Add item
+              </button>
+            </div>
+          )}
         </div>
       ))}
 

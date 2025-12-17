@@ -34,17 +34,19 @@ export interface ChecklistItem {
 /**
  * Block types for unified editor
  */
-export type BlockType = 'text' | 'checklist';
+export type BlockType = 'text' | 'checklist' | 'toggle';
 
 /**
  * Represents a single content block in a note.
- * Can be either a text paragraph or a checklist item.
+ * Can be text, checklist, or toggle with nested content.
  */
 export interface ContentBlock {
   id: string;
   type: BlockType;
   content: string;
   checked?: boolean; // Only for checklist blocks
+  isExpanded?: boolean; // Only for toggle blocks
+  children?: ContentBlock[]; // Nested blocks for toggle lists
   order: number;
 }
 

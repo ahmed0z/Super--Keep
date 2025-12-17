@@ -189,6 +189,21 @@ export const NoteCard: React.FC<NoteCardProps> = ({
                     </span>
                   </div>
                 )}
+                {block.type === 'toggle' && (
+                  <div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-gray-500 text-xs mt-0.5">▸</span>
+                      <span className="text-sm text-gray-700 dark:text-gray-300 break-words flex-1">
+                        {block.content}
+                      </span>
+                    </div>
+                    {block.children && block.children.length > 0 && (
+                      <div className="ml-6 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        {block.children.length} item{block.children.length !== 1 ? 's' : ''}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
             {note.blocks.length > 10 && (
